@@ -1,0 +1,285 @@
+﻿<!DOCTYPE>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<style>
+			* {
+				-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+				-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+				box-sizing: border-box;
+				word-wrap: break-word;
+				font-family: inherit;
+				opacity: default;
+			}
+			:root {
+				--header-back:#363738;
+
+				--text: #000000;
+				--halftone: #7F7F7F;
+				--reverse: #FFFFFF;
+				--link: #0066FF;
+				--link-h: #0A31F5;
+				--link-s: #1B1D20;
+				--link-broken:#DC722C;/*F50A0A*/
+				--link-broken-h:#B84E07;
+				--link-invalid:#DC2C2C;/*F50A0A*/
+				--link-invalid-h:#AA0404;
+
+				--page-bg: #F0F3F8;
+				--article-bg: #FFFFFF;
+				--quote-bg: #FAFAFB;
+				--disabled: #E8E9EB;
+
+				--article-border: #A7D7F9;
+				--quote-border: #DCDDDE;
+
+
+				--success: #43B581; /*67 181 129*/
+				--success-b: #3CA374; /*60 163 116*/
+				--success-c: #369157; /*54 145 87*/
+				--info: #7289DA; /*114 137 218*/
+				--info-b: #677BC4; /*103 123 196*/
+				--info-c: #5B6EAE; /*91 110 174*/
+				--neutral: #FAFAFB;
+				--neutral-b: #F3F3F4;
+				--neutral-c: #DCDDDE;
+				--warning: #FAA61A; /*250 166 26*/
+				--warning-b: #E19517; /*250 166 26*/
+				--warning-c: #C88515; /*250 166 26*/
+				--danger: #F04747;
+				--danger-b: #D84040;
+				--danger-c: #C03939;
+			}
+			body {
+				width: 100%;
+				height: 100vh;
+				margin: 0;
+				padding: 0;
+				border: 1px solid;
+				overflow: hidden;
+				display: flex;
+				flex-direction: column;
+			}
+			#appbar {
+				width: 100%;
+				height: 2rem;
+				padding: 0.25rem;
+				padding-left: 0.5rem;
+
+				background-color: var(--header-back);
+				color: var(--reverse);
+			}
+			#apptitle,
+			.ubuntu #appbuttons,
+			.ubuntu #button-exit {float: left;}
+			.windows #appbuttons,
+			.windows #button-exit {float: right;}
+			#appbuttons {
+				display: flex;
+				flex-direction: row;
+			}
+			.windows #appbuttons button {
+				background: none;
+				color: var(--reverse);
+				height: 1rem;
+				padding: 0 0.5rem;
+				border: none;
+			}
+			.ubuntu #appbuttons button {
+				background: #FFFFFF40;
+				color: var(--text);
+				width: 1rem;
+				height: 1rem;
+				border-radius: 0.5rem;
+				border: 1px solid transparent;
+				padding: 0;
+				margin: 0 0.25rem;
+				text-align: center;
+			}
+			.windows #appbuttons button:hover {background: #4267B680;}
+			.windows #appbuttons button:active {background: #4267B640;}
+			.ubuntu #appbuttons button:hover {background: #FFFFFF80;}
+			.ubuntu #appbuttons button:active {background: #FFFFFF20;}
+			.windows button#button-exit,
+			.ubuntu button#button-exit {
+				border-color: var(--danger-c);
+				background-color: var(--danger-b);
+			}
+			.ubuntu button#button-exit {order: -1;}
+			.windows button#button-exit:hover,
+			.ubuntu button#button-exit:hover {
+				background-color: var(--danger);
+			}
+			.windows button#button-exit:active,
+			.ubuntu button#button-exit:active {
+				background-color: var(--danger-c);
+			}
+
+			.container {
+				flex: 1 1 auto;
+				display: flex;
+				flex-direction: column;
+			}
+			#menubar {
+				height: 1.5rem;
+				background-color: var(--neutral-b);
+			}
+			#menubar > table {
+				height: 1.5rem;
+				padding: 0;
+				margin: 0;
+				border-spacing: 0;
+				overflow: visible;
+			}
+			#menubar > table > thead > tr > th {
+				height: 1.5rem;
+				padding: 0.125rem 0.5rem;
+				margin: 0;
+				font-weight: normal;
+				cursor: pointer;
+				overflow: visible;
+			}
+			#menubar > table th:hover {
+				background-color: #4267B6;
+				color: var(--reverse);
+			}
+			#menubar .submenu {
+				background-color: var(--neutral-b);
+				border-color: var(--neutral-c);
+				color: var(--text);
+				width: 0;
+				height: 0;
+				overflow-x: visible;
+				display: none;
+			}
+			.submenu table {
+				width: 100%;
+			}
+
+			#view {
+				padding: 2rem;
+				flex: 1 1 auto;
+				text-align: center;
+				display: flex;
+			}
+			#bottom-buttons {
+				background-color: var(--neutral);
+				border: 1px solid var(--neutral-c);
+				width: 100%;
+				padding: 0.5rem 1.5rem;
+				text-align: center;
+			}
+			#prev, #next {
+				width: 1.5rem;
+				height: 1.5rem;
+			}
+			#play {
+				width: 2.5rem;
+				height: 2.5rem;
+			}
+			#prev, #play, #next {
+				display: inline-block;
+				border-radius: 50%;
+				background-color: var(--info-b);
+				color: var(--text);
+				border: 1px solid var(--info-c);
+				vertical-align: middle;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body class="windows">
+		<div id="appbar">
+			<div id="appbuttons">
+				<button id="button-minimize">&ndash;</button>
+				<button id="button-maximize">&square;</button>
+				<button id="button-exit">&times;</button>
+			</div>
+			<div id="apptitle">
+				<span>Biggus Dickus</span>
+			</div>
+		</div>
+		<div class="container">
+			<div id="menubar">
+				<table>
+					<thead>
+						<tr>
+							<th>
+								<span>Fichier</span>
+								<div class="submenu">
+									<table>
+										<tbody>
+											<tr><th></th><td>Ouvrir</td></tr>
+											<tr><th></th><td>Fermer</td></tr>
+											<tr class=""></tr>
+											<tr><th></th><td>Quitter</td></tr>
+										</tbody>
+									</table>
+								</div>
+							</th>
+							<th><span>Édition</span></th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div id="view">
+				<div style="flex: 1 0 auto; background-color: #00000040">
+				</div>
+			</div>
+			<div id="bottom-buttons">
+				<div id="center-buttons">
+					<div id="prev">
+						<div style="
+							height: 0.75rem;
+							width: 0.375rem;
+							border: 0.375rem solid transparent;
+							border-left: none;
+							border-right-color: white;
+							display: inline-block;
+							vertical-align: middle;"
+						></div><div style="
+							height: 0.375rem;
+							width: 0.75rem;
+							background-color: white;
+							display: inline-block;
+							vertical-align: middle;
+						"></div><div style="height:100%; display: inline-block;vertical-align: middle;"></div>
+					</div>
+					<div id="play">
+						<div style="height:100%; display: inline-block;vertical-align: middle;"></div
+						><div style="
+							display: inline-block;
+							width: 1.25rem;
+							height: 1.5rem;
+							border: 0 solid transparent;
+							border-left-width: 1.25rem;
+							border-top-width: 0.75rem;
+							border-bottom-width: 0.75rem;
+							border-left-color: white;
+							border-right: none;
+							vertical-align: middle;">
+						</div>
+					</div>
+					<div id="next">
+						<div style="height:100%; display: inline-block;vertical-align: middle;"></div
+						><div style="
+							height: 0.375rem;
+							width: 0.75rem;
+							background-color: white;
+							display: inline-block;
+							vertical-align: middle;
+						"></div><div style="
+							height: 0.75rem;
+							width: 0.375rem;
+							border: 0.375rem solid transparent;
+							border-left-color: white;
+							border-right: none;
+							display: inline-block;
+							vertical-align: middle;"
+						></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
