@@ -1,0 +1,17 @@
+Règles :
+
+- Choisir le répertoire où sont localisées les images,
+- Modifier le nom des images,
+- Changer l’orientation des images (portrait vs paysage),
+- Recadrer une image en découpant une zone dans l’image,
+- Lancer un diaporama,
+- Associer des mots-clés aux images,
+- Modifier les mots-clés des images,
+- Faire une recherche par mot-clé des images.
+
+Enfin, votre application devra être internationalisée en proposant un affichage en trois langues (dont un qui n’est pas écrit avec un alphabet latin 1 ).
+
+- Affichage des images situées dans le répertoire d’installation du logiciel,
+- Saisie de mots-clés pour une image donnée,
+- Recherche par mots-clés.
+
