@@ -13,4 +13,8 @@ public class View extends Scene {
 	public void Add(Node node) {
 		((Pane)this.getRoot()).getChildren().add(node);
 	}
+    
+    public Pane GetRoot() {
+        return (Pane)this.getRoot();
+    }
 }

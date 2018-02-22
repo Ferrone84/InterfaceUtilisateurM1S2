@@ -3,8 +3,13 @@ package viewer;
 import java.util.List;
 import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.control.Control;
 import javafx.scene.control.MenuBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import viewer.utilities.*;
@@ -28,10 +33,15 @@ public class Viewer extends Application {
 		this.frame = frame;
 		this.frame.setTitle("Viewer");
 
+        Pane p = this.initPreview();
 		this.InitializeView();
 		
 		this.frame.setScene(this.view);
 		this.frame.show();
+        
+        System.out.println(p.getHeight() + " " + p.getWidth());
+        System.out.println(this.view.getHeight() + " " + this.view.getWidth());
+        System.out.println(this.view.GetRoot().getHeight() + " " + this.view.GetRoot().getWidth());
 	}
 
 	/**
@@ -83,6 +93,25 @@ public class Viewer extends Application {
 		menu.add(new CMenuItem("ru", EventFactory.Lang(this, "ru")));
 		menubar.getMenus().add(UIFactory.MakeMenu(menu));
 	}
+    
+    private Pane initPreview() {
+        StackPane pane = new StackPane();
+        Image image = new Image("file:resources/img/sunset.jpg");
+        ImageView imageView = new ImageView(image);
+        imageView.setPreserveRatio(true);
+        imageView.fitHeightProperty().bind(pane.prefHeightProperty());
+        imageView.fitWidthProperty().bind(pane.prefWidthProperty());
+
+        pane.getChildren().add(imageView);
+        pane.prefWidthProperty().bind(this.view.GetRoot().widthProperty());
+        pane.prefHeightProperty().bind(this.view.GetRoot().heightProperty());
+        pane.setMaxWidth(Control.USE_PREF_SIZE);
+        pane.setMaxHeight(Control.USE_PREF_SIZE);
+        StackPane.setAlignment(imageView, Pos.CENTER);
+        this.view.Add(pane);
+        
+        return pane;
+    }
 	
 	public void CloseDir() {
 

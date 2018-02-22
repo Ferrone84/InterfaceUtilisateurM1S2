@@ -40,11 +40,13 @@ public class UIFactory {
 			item = new MenuItem();
 			item.setText(Lang.GetWord(citem.getKey()));
 			item.setOnAction(citem.getValue());
-			item.setGraphic(new ImageView("file:resources/img/" + citem.getKey() + ".png"));
+            ImageView iv = new ImageView("file:resources/img/" + citem.getKey() + ".png");
+            iv.setFitHeight(16);
+            iv.setFitWidth(16);
+            iv.setPreserveRatio(true);
+            item.setGraphic(iv);
 			menu.getItems().add(item);
 		}
 		return menu;
 	}
 }
-
-// TODO : set la taille des images !! mdddddddr
