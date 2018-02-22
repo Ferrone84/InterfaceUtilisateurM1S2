@@ -33,15 +33,10 @@ public class Viewer extends Application {
 		this.frame = frame;
 		this.frame.setTitle("Viewer");
 
-        Pane p = this.initPreview();
 		this.InitializeView();
 		
 		this.frame.setScene(this.view);
 		this.frame.show();
-        
-        System.out.println(p.getHeight() + " " + p.getWidth());
-        System.out.println(this.view.getHeight() + " " + this.view.getWidth());
-        System.out.println(this.view.GetRoot().getHeight() + " " + this.view.GetRoot().getWidth());
 	}
 
 	/**
@@ -92,9 +87,7 @@ public class Viewer extends Application {
 		menu.add(new CMenuItem("", null));
 		menu.add(new CMenuItem("ru", EventFactory.Lang(this, "ru")));
 		menubar.getMenus().add(UIFactory.MakeMenu(menu));
-	}
-    
-    private Pane initPreview() {
+	
         StackPane pane = new StackPane();
         Image image = new Image("file:resources/img/sunset.jpg");
         ImageView imageView = new ImageView(image);
@@ -104,13 +97,12 @@ public class Viewer extends Application {
 
         pane.getChildren().add(imageView);
         pane.prefWidthProperty().bind(this.view.GetRoot().widthProperty());
-        pane.prefHeightProperty().bind(this.view.GetRoot().heightProperty());
+        pane.prefHeightProperty().bind(this.view.GetRoot().heightProperty().subtract(menubar.heightProperty()));
         pane.setMaxWidth(Control.USE_PREF_SIZE);
         pane.setMaxHeight(Control.USE_PREF_SIZE);
+        pane.layoutYProperty().bind(menubar.heightProperty());
         StackPane.setAlignment(imageView, Pos.CENTER);
         this.view.Add(pane);
-        
-        return pane;
     }
 	
 	public void CloseDir() {
