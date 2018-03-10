@@ -1,0 +1,26 @@
+close_dir : Ordner schließen
+close_view : Ansicht schließen
+crop : Auswahleditor
+diapo : Diashow starten
+edit : Bearbeiten
+file : Datei
+lang : Sprache
+mirror_h : Horizontale Spiegelung
+mirror_v : Vertikale Spiegelung
+nofile : Keine Datei
+open_dir : Ordner öffnen
+open_pic : Ansicht öffnen
+quit : Beenden
+rename : Umbenennen
+search : Suche
+tag : Neues Bild-Tag
+tags : Bild-Tags
+turn_180 : Um 180° drehen
+turn_90_a : Um -90° drehen
+turn_90_h : Um +90° drehen
+
+# Les langues
+de : Deutsch (de)
+en-uk : English (uk)
+fr-fr : Français (fr)
+ru : Русском (ru)

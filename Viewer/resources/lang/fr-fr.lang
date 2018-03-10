@@ -1,0 +1,26 @@
+close_dir : Fermer le dossier
+close_view : Ferme la vue
+crop : Rogner
+diapo : Lancer le diaporama
+edit : Édition
+file : Fichier
+lang : Langue
+mirror_h : Miroir horizontal
+mirror_v : Miroir vertical
+nofile : Aucun fichier
+open_dir : Ouvrir un dossier
+open_pic : Ouvrir une image
+quit : Quitter
+rename : Renommer
+search : Rechercher
+tag : Nouveau mot-clé
+tags : Mots-clé
+turn_180 : Rotation (180°)
+turn_90_a : Rotation (-90°)
+turn_90_h : Rotation (+90°)
+
+# Les langues
+de : Deutsch (de)
+en-uk : English (uk)
+fr-fr : Français (fr)
+ru : Русском (ru)

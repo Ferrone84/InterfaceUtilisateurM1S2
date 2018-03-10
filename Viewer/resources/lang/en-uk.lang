@@ -1,0 +1,26 @@
+close_dir : Close folder
+close_view : Close view
+crop : Crop
+diapo : Launch slideshow
+edit : Edit
+file : File
+lang : Language
+mirror_h : Horizontal mirroring
+mirror_v : Vertical mirroring
+nofile : No file to show
+open_dir : Open folder
+open_pic : Open image
+quit : Quit
+rename : Rename
+search : Search
+tag : New tag
+tags : Tags
+turn_180 : Rotate (180°)
+turn_90_a : Rotate (-90°)
+turn_90_h : Rotate (+90°)
+
+# Les langues
+de : Deutsch (de)
+en-uk : English (uk)
+fr-fr : Français (fr)
+ru : Русском (ru)
