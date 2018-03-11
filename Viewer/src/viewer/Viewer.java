@@ -202,8 +202,10 @@ public class Viewer extends Application {
 			List<String> searchterms = new LinkedList();
 			while (matcher.find()) {searchterms.add(matcher.group(0));}
 			List<ImageFile> imagefiles = new LinkedList();
-			for (String matchingfile : ImageTags.GetMatching(searchterms)) {
-				imagefiles.add(new ImageFile(new File(matchingfile)));
+			if (!searchterms.isEmpty()) {
+				for (String matchingfile : ImageTags.GetMatching(searchterms)) {
+					imagefiles.add(new ImageFile(new File(matchingfile)));
+				}
 			}
 			((SearchScreen)this.view.GetScreen("search")).Setup(imagefiles);
 		}
