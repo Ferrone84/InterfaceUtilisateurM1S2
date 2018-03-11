@@ -1,0 +1,26 @@
+close_dir : Закрыть папку
+close_view : Закрыть изображение
+crop : Скадрировать
+diapo : Запуск слайд-шоу
+edit : Правка
+file : Файл
+lang : Язык
+mirror_h : Отразить по горизонтали
+mirror_v : Отразить по вертикали
+nofile : Нет файла
+open_dir : Открыть папку
+open_pic : Открыть изображение
+quit : Завершить
+rename : Переименовать
+search : Поиск
+tag : Новый тег
+tags : Теги
+turn_180 : Повернуть на 180°
+turn_90_a : Повернуть на -90°
+turn_90_h : Повернуть на 90°
+
+# Les langues
+de : Deutsch (de)
+en-uk : English (uk)
+fr-fr : Français (fr)
+ru : Русскй (ru)
