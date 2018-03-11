@@ -89,8 +89,8 @@ public class SearchScreen extends Screen {
 		
 		this.Add(anchorpane);
 		anchorpane.getChildren().add(label);
-		anchorpane.getChildren().add(searchbutton);
 		anchorpane.getChildren().add(textfield);
+		anchorpane.getChildren().add(searchbutton);
 		anchorpane.getChildren().add(imagefilelist);
 		anchorpane.getChildren().add(okbutton);
 		
