@@ -3,6 +3,7 @@ package viewer.view;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public class Screen extends Scene {
 	private static final int DEFAULT_WIDTH = 768;
@@ -78,6 +79,10 @@ public class Screen extends Scene {
 	}
 	public void SetTitle(String value) {
 		this.title = value;
+		Stage frame = ((Stage)this.getWindow());
+		if (frame != null) {
+			frame.setTitle(this.GetTitle());
+		}
 	}
 
 }

@@ -1,8 +1,9 @@
 package viewer.utilities;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -23,7 +24,8 @@ public class Lang {
 		Pattern pattern = Pattern.compile("^[ \t]*(?:([A-Za-z0-9_-]*)(?:[ \t]*[=:][ \t]*|[ \t]+))?((?:\"[^\"]\"|[^#]*[^# \t])?)[ \t]*(#.*)?$");
 		Matcher matcher;
 		try {
-			reader = new BufferedReader(new FileReader("resources/lang/"+lang+".lang"));
+			InputStreamReader r = new InputStreamReader(new FileInputStream("resources/lang/"+lang+".lang"), "UTF-8"); // ENCODING FIX
+			reader = new BufferedReader(r);//new FileReader("resources/lang/"+lang+".lang"), "e");
 			while ((line = reader.readLine()) != null) {
 				if ((matcher = pattern.matcher(line)).matches()) {
 					key = matcher.group(1);

@@ -3,6 +3,7 @@ package viewer.view;
 import static javafx.beans.binding.Bindings.min;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -11,6 +12,7 @@ import viewer.model.ImageFile;
 public class ImageFileFrame extends StackPane {
 	private ImageView imageview;
 	private ImageFile image;
+	private Tooltip tooltip;
 	private Label name;
 	public ImageFileFrame(ImageFile image) {
 		super();
@@ -29,6 +31,7 @@ public class ImageFileFrame extends StackPane {
 		
 		this.name.setText(this.image.GetName());
 		this.imageview.setImage(this.image);
+		this.tooltip.setText(this.image.GetFullName());
 	}
 	
 	public void Setup() {
@@ -44,5 +47,7 @@ public class ImageFileFrame extends StackPane {
 		
 		this.imageview.setPreserveRatio(true);
 		StackPane.setAlignment(this.imageview, Pos.CENTER);
+		this.tooltip = new Tooltip();
+		Tooltip.install(this, this.tooltip);
 	}
 }

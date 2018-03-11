@@ -2,6 +2,9 @@ package viewer.view;
 
 import java.util.HashMap;
 import java.util.Map;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
 import javafx.stage.Stage;
@@ -17,6 +20,7 @@ public class View {
 		this.screens = new HashMap<>();
 		this.screens.put("main", new MainScreen());
 		this.screens.put("tags", new TagsScreen());
+		this.screens.put("search", new SearchScreen());
 		this.screen = null;
 		this.mainframe = null;
 		this.SetFrame(frame);
@@ -69,15 +73,26 @@ public class View {
 	}
 	public void Summon(String frame, Screen screen) {
 		if (screen == null) {return;}
-		final Stage dialog = new Stage();
-		//this.frames.put(frame, dialog);
-		dialog.initModality(Modality.APPLICATION_MODAL);
-		dialog.initOwner(this.mainframe);
-		dialog.setTitle(screen.GetTitle());
-		dialog.setScene(screen);
-		dialog.showAndWait();
+		Stage dialog = this.frames.get(frame);
+		if (dialog == null) {
+			dialog = new Stage();
+			dialog.initOwner(this.mainframe);
+			dialog.setTitle(screen.GetTitle());
+			dialog.setScene(screen);
+			this.frames.put(frame, dialog);
+		}
+		dialog.show();
+		dialog.toFront();
 	}
 	public void SummonError(String error) {
 		System.out.println(error);
+		final Stage dialog = new Stage();
+		dialog.initModality(Modality.APPLICATION_MODAL);
+		dialog.initOwner(this.mainframe);
+		VBox dialogVbox = new VBox(20);
+		dialogVbox.getChildren().add(new Text("Error : " + error));
+		Scene dialogScene = new Scene(dialogVbox, 384, 96);
+		dialog.setScene(dialogScene);
+		dialog.show();
 	}
 }

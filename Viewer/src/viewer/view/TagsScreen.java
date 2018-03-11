@@ -31,7 +31,7 @@ public class TagsScreen extends Screen {
 	private FlowPane tagslist;
 	
 	public TagsScreen() {
-		super(480,270);
+		super(480, 270);
 		this.Initialize();
 	}
 	private void Initialize() {

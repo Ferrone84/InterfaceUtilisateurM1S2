@@ -1,8 +1,10 @@
 package viewer;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,6 +24,7 @@ import viewer.model.ImageTags;
 import viewer.utilities.*;
 import viewer.view.ImageFileFrame;
 import viewer.view.Screen;
+import viewer.view.SearchScreen;
 import viewer.view.TagFrame;
 
 public class Viewer extends Application {
@@ -44,6 +47,7 @@ public class Viewer extends Application {
 	public final Delegate QuitEvent = new Delegate();
 	public final Delegate RenameEvent = new Delegate();
 	public final Delegate SearchEvent = new Delegate();
+	public final Delegate SearchByTagsEvent = new Delegate();
 	public final Delegate TagsEvent = new Delegate();
 	public final Delegate TagCreationEvent = new Delegate();
 	public final Delegate TagRemovalEvent = new Delegate();
@@ -51,12 +55,16 @@ public class Viewer extends Application {
 	public final Delegate Turn180Event = new Delegate();
 	public final Delegate Turn270Event = new Delegate();
 
+	private final EventHandler<Event> OnCloseDir = (EventHandler<Event>) (Event event) -> {this.OnCloseDir(event);};
+	private final EventHandler<Event> OnCloseView = (EventHandler<Event>) (Event event) -> {this.OnCloseView(event);};
 	private final EventHandler<Event> OnLang = (EventHandler<Event>) (Event event) -> {this.OnLang(event);};
 	private final EventHandler<Event> OnQuit = (EventHandler<Event>) (Event event) -> {this.OnQuit(event);};
 	private final EventHandler<Event> OnOpenDir = (EventHandler<Event>) (Event event) -> {this.OnOpenDir(event);};
 	private final EventHandler<Event> OnOpenedDir = (EventHandler<Event>) (Event event) -> {this.OnOpenedDir(event);};
 	private final EventHandler<Event> OnOpenPic = (EventHandler<Event>) (Event event) -> {this.OnOpenPic(event);};
 	private final EventHandler<Event> OnOpenedPic = (EventHandler<Event>) (Event event) -> {this.OnOpenedPic(event);};
+	private final EventHandler<Event> OnSearch = (EventHandler<Event>) (Event event) -> {this.OnSearch(event);};
+	private final EventHandler<Event> OnSearchByTags = (EventHandler<Event>) (Event event) -> {this.OnSearchByTags(event);};
 	private final EventHandler<Event> OnTags = (EventHandler<Event>) (Event event) -> {this.OnTags(event);};
 	private final EventHandler<Event> OnTagCreation = (EventHandler<Event>) (Event event) -> {this.OnTagCreation(event);};
 	private final EventHandler<Event> OnTagRemoval = (EventHandler<Event>) (Event event) -> {this.OnTagRemoval(event);};
@@ -75,8 +83,17 @@ public class Viewer extends Application {
 		this.view = new View(frame);
 
 		this.InitializeView();
-		ImageTags.LoadFromFile("./resources/tags.yml");
 		this.view.Show();
+		try {
+			ImageTags.LoadFromFile("./resources/tags.yml");
+		}
+		catch (IOException e) {
+			this.view.SummonError("Could not load image tags : " + e.getMessage());
+		}
+	}
+	@Override
+	public void stop() {
+		ImageTags.SaveToFile("./resources/tags.yml");
 	}
 
 	/**
@@ -87,6 +104,8 @@ public class Viewer extends Application {
 	}
 
 	public void DefineBaseEvents() {
+		this.CloseDirEvent.Subscribe(this.OnCloseDir);
+		this.CloseViewEvent.Subscribe(this.OnCloseView);
 		this.LangEvent.Subscribe(this.OnLang);
 		this.QuitEvent.Subscribe(this.OnQuit);
 		this.OpenDirEvent.Subscribe(this.OnOpenDir);
@@ -94,12 +113,14 @@ public class Viewer extends Application {
 		this.OpenPicEvent.Subscribe(this.OnOpenPic);
 		this.OpenedPicEvent.Subscribe(this.OnOpenedPic);
 		this.PreviewClickedEvent.Subscribe(OnPreviewClicked);
+		this.SearchEvent.Subscribe(this.OnSearch);
+		this.SearchByTagsEvent.Subscribe(this.OnSearchByTags);
 		this.TagsEvent.Subscribe(this.OnTags);
 		this.TagCreationEvent.Subscribe(this.OnTagCreation);
 		this.TagRemovalEvent.Subscribe(this.OnTagRemoval);
 	}
 	public void InitializeView() {
-		this.LangEvent.Call(new RichEvent<String>("de"));
+		this.LangEvent.Call(new RichEvent<String>("fr-fr"));
 		this.view.SwitchScreen("main");
 	}
 	
@@ -110,6 +131,12 @@ public class Viewer extends Application {
 		this.imagefiles = imagefiles;
 	}
 
+	public void OnCloseDir(Event event) {
+		this.imagefiles = null;
+	}
+	public void OnCloseView(Event event) {
+		this.imagefile = null;
+	}
 	private void OnLang(Event event) {
 		Lang.Load(((RichEvent<String>)event).GetData());
 	};
@@ -156,44 +183,41 @@ public class Viewer extends Application {
 	private void OnOpenedPic(Event event) {
 		this.imagefile = ((RichEvent<ImageFile>)event).GetData();
 	}
-	public void CloseDir() {
-
-	}
-	public void CloseView() {
-
-	}
-	public void Crop() {
-
-	}
-	public void Diapo() {
-
-	}
 	public void Lang(String lang) {
 		Lang.Load(lang);
 	}
-	public void Mirror(boolean direction) {
-
+	public void OnSearch(Event event) {
+		Screen screen = this.view.GetScreen("search");
+		if (screen != null) {
+			this.view.Summon("search", screen);
+		}
 	}
-	public void OpenDir() {
-
-	}
-	public void OpenPic() {
-
-	}
-	public void Rename() {
-	}
-	public void Search() {
-
+	public void OnSearchByTags(Event event) {
+		String search = ((RichEvent<TextField>)event).GetData().getText();
+		Pattern pattern = Pattern.compile("(?:(?:^|[ ]+)([a-z]+(?:[-_][a-z]+)*))*$");
+		Matcher matcher = pattern.matcher(search);
+		if (matcher.matches()) {
+			pattern = Pattern.compile("[a-z]+(?:[-_][a-z]+)*");
+			matcher = pattern.matcher(search);
+			List<String> searchterms = new LinkedList();
+			while (matcher.find()) {searchterms.add(matcher.group(0));}
+			List<ImageFile> imagefiles = new LinkedList();
+			for (String matchingfile : ImageTags.GetMatching(searchterms)) {
+				imagefiles.add(new ImageFile(new File(matchingfile)));
+			}
+			((SearchScreen)this.view.GetScreen("search")).Setup(imagefiles);
+		}
+		else {
+			this.view.SummonError("Must be space-separated tags.\nTags are one or more groups of lowercase latin letters, separated by one '-' or one '_'");
+		}
 	}
 	public void OnTags(Event event) {
 		if (this.imagefile == null) {return;}
 		Screen screen = this.view.GetScreen("tags");
 		if (screen != null) {
 			screen.Setup(ImageTags.GetOrCreate(this.imagefile.GetName()));
+			this.view.Summon("tags", screen);
 		}
-		this.view.Summon("tags", screen);
-		System.out.println("Saving");
-		ImageTags.SaveToFile("./resources/tags.yml");
 	}
 	public void Turn(int quarters) {
 

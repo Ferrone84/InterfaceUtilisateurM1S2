@@ -76,6 +76,8 @@ public class MainScreen extends Screen {
 		viewer.MirrorHEvent.Subscribe(this.OnMirrorH());
 		viewer.MirrorVEvent.Subscribe(this.OnMirrorV());
 		
+		viewer.CloseViewEvent.Subscribe(this.OnCloseView);
+		viewer.CloseDirEvent.Subscribe(this.OnCloseDir);
 		viewer.LangEvent.Subscribe(this.OnLang);
 		viewer.OpenedPicEvent.Subscribe(this.OnOpenedPic);
 		viewer.OpenedDirEvent.Subscribe(this.OnOpenedDir);
@@ -168,8 +170,8 @@ public class MainScreen extends Screen {
 		imagefilelist.SetParent(pane);
 		imagefilelist.setVisible(false);
 		
-		pane.getChildren().add(label);
 		pane.getChildren().add(imagefilelist);
+		pane.getChildren().add(label);
 		
 		this.leftside = pane;
 		this.nofilelabel = label;
@@ -204,6 +206,11 @@ public class MainScreen extends Screen {
 		this.rightcontextmenu.setAutoHide(true);
 		
 		this.menubar.getMenus().get(1).disableProperty().bind(this.right_view.imageProperty().isNull());
+		this.menubar.getMenus().get(0).getItems().get(0).setDisable(true);
+		this.menubar.getMenus().get(1).getItems().get(0).setDisable(true);
+		this.rightcontextmenu.getItems().get(0).setDisable(true);
+		this.menubar.getMenus().get(1).getItems().get(9).setDisable(true);
+		this.rightcontextmenu.getItems().get(9).setDisable(true);
 	}
 	
 	/* =========================================================================
@@ -249,16 +256,23 @@ public class MainScreen extends Screen {
 			}
 		};
 	}
-
+	
+	public final EventHandler<Event> OnCloseDir = (EventHandler<Event>) (Event event) -> {this.OnCloseDir(event);};
+	public void OnCloseDir(Event event) {
+		this.imagelist.Setup(null);
+	}
+	public final EventHandler<Event> OnCloseView = (EventHandler<Event>) (Event event) -> {this.OnCloseView(event);};
+	public void OnCloseView(Event event) {
+		this.SetImage(null);
+	}
+	
 	public final EventHandler<Event> OnLang = (EventHandler<Event>) (Event event) -> {this.OnLang(event);};
 	public void OnLang(Event event) { // RecompileMenu
 		for (Menu menu : this.GetMenuBar().getMenus()) {
 			UIFactory.Recompile(menu);
 		}
-		UIFactory.Recompile(rightcontextmenu);
-		UIFactory.Recompile(this.nofilelabel);//.setText(Lang.GetWord("nofile"));
-		
-		this.rightcontextmenu.getItems().setAll(UIFactory.MakeMenu(this.rightcontextmenu_struct).getItems());
+		UIFactory.Recompile(this.rightcontextmenu);
+		UIFactory.Recompile(this.nofilelabel);
 	}
 
 	public final EventHandler<Event> OnOpenedPic = (EventHandler<Event>) (Event event) -> {this.OnOpenedPic(event);};
@@ -267,8 +281,7 @@ public class MainScreen extends Screen {
 	}
 	public void SetImage(ImageFile imagefile) {
 		this.imagefile = imagefile;
-		Boolean imageisnull = (this.imagefile != null);
-		if (imageisnull) {
+		if (this.imagefile != null) {
 			this.rightside.setOnContextMenuRequested(this.OnRightSideContext);
 		}
 		this.ResetImageView();
@@ -276,6 +289,7 @@ public class MainScreen extends Screen {
 	private void ResetImageView() {
 		this.right_view.setScaleX(1.0);
 		this.right_view.setScaleY(1.0);
+		this.right_view.setRotate(0.0);
 		this.right_view.setImage(this.imagefile);
 		if (this.imagefile == null) {
 			this.right_view.fitWidthProperty().bind(this.right_pref_hsize);

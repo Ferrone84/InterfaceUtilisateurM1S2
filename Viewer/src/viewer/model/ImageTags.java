@@ -44,43 +44,29 @@ public class ImageTags {
 		ImageTags.instances.remove(filename);
 	}
 	
-	public static void LoadFromFile(String filename) {
-		
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(filename));
-			String line;
-			String group_filename;
-			String group_tags;
-			ImageTags imagetags;
-			
-			
-			String regex_tag = "[a-z]+(?:[-_][a-z]+)*";
-			String regex_tags = regex_tag + "(?:," + regex_tag + ")*";
-			Pattern linepattern = Pattern.compile("^(.+): (" + regex_tags + ")$");
-			Pattern tasgpattern = Pattern.compile("^" + regex_tags + "$");
-			Matcher matcher;
-			while ((line = br.readLine()) != null) {
-				matcher = linepattern.matcher(line);
-				if (matcher.matches()) {
-					group_filename = matcher.group(1);
-					group_tags = matcher.group(2);
-					String[] tags_list = group_tags.split(",");
-//					System.out.println("Match on line :");
-//					System.out.print("-> "); System.out.println(line);
-//					System.out.print(" > "); System.out.println(group_filename);
-//					for (String tag : tags_list) {System.out.print(" - "); System.out.println(tag);}
-					imagetags = new ImageTags(group_filename);
-					imagetags.SetTags(new ArrayList<String>(tags_list.length + 1));
-					for (String tag : tags_list) {imagetags.Add(tag);}
-				}
-				else {
-//					System.out.println("No match on line :");
-//					System.out.print("-> "); System.out.println(line);
-				}
+	public static void LoadFromFile(String filename) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(filename));
+		String line;
+		String group_filename;
+		String group_tags;
+		ImageTags imagetags;
+
+
+		String regex_tag = "[a-z]+(?:[-_][a-z]+)*";
+		String regex_tags = regex_tag + "(?:," + regex_tag + ")*";
+		Pattern linepattern = Pattern.compile("^(.+): (" + regex_tags + ")$");
+		Pattern tasgpattern = Pattern.compile("^" + regex_tags + "$");
+		Matcher matcher;
+		while ((line = br.readLine()) != null) {
+			matcher = linepattern.matcher(line);
+			if (matcher.matches()) {
+				group_filename = matcher.group(1);
+				group_tags = matcher.group(2);
+				String[] tags_list = group_tags.split(",");
+				imagetags = new ImageTags(group_filename);
+				imagetags.SetTags(new ArrayList<String>(tags_list.length + 1));
+				for (String tag : tags_list) {imagetags.Add(tag);}
 			}
-		}
-		catch (IOException e) {
-			
 		}
 	}
 	public static void SaveToFile(String filename) {
@@ -97,6 +83,14 @@ public class ImageTags {
 		catch (IOException e) {
 			
 		}
+	}
+
+	public static List<String> GetMatching(List<String> searchterms) {
+		List<String> results = new LinkedList();
+		for (Entry<String, ImageTags> entry : ImageTags.instances.entrySet()) {
+			if (entry.getValue().Matches(searchterms)) {results.add(entry.getKey());}
+		}
+		return results;
 	}
 	
 	private List<String> tags;
@@ -132,6 +126,23 @@ public class ImageTags {
 			if (tag.equals(other)) {return true;}
 		}
 		return false;
+	}
+	
+	public boolean MatchesExactly(String tag) {
+		return this.Contains(tag);
+	}
+	public boolean Matches(String search) {
+		for (String tag : this.tags) {
+			if (tag.contains(search)) {return true;}
+		}
+		return false;
+	}
+	public boolean Matches(List<String> searchterms) {
+		if (this.tags.isEmpty()) {return false;}
+		for (String term : searchterms) {
+			if (!this.Matches(term)) {return false;}
+		}
+		return true;
 	}
 	
 	public String toString() {return this.ToString();}

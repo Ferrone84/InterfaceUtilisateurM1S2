@@ -28,6 +28,9 @@ public class ImageFile extends Image implements Comparable<ImageFile> {
 	public String GetName() {
 		return this.file.getName();
 	}
+	public String GetFullName() {
+		return this.file.getAbsolutePath();
+	}
 	
 	public ImageTags GetTags() {
 		try {
